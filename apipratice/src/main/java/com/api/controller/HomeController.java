@@ -53,39 +53,39 @@ public class HomeController {
 	public void loginGet() {
 		
 	}
-	/**
-	 * GET /oauth/authorize?client_id={app_key}&redirect_uri={redirect_uri}&response_type=code HTTP/1.1
-	 * Host: kauth.kakao.com
-	 * HTTP/1.1 302 Found
-	 * Content-Length: 0
-     * Location: {redirect_uri}?code={authorize_code}
-	 */
-	@RequestMapping(value="/login")
-	public String login(@RequestParam("code") String code,Model model,HttpSession session) {
-		log.info("code: "+code);
-		//요청해서 받은 code를 이용해서 POST로 토큰을 요청하면 받아온다.
-		String access_Token = kakaoApi.getAccessToken(code);
-		log.info("access_Token: "+access_Token);
-		//받아온 토큰을 이용해서 사용자 정보를 가져온다.
-		HashMap<String,Object> userInfo = kakaoApi.getUserInfo(access_Token);
-		
-		//만약 클라이언트 이메일이 존재한다면 세션에 이메일과 토큰 등록
-		if(userInfo.get("email")!=null) {
-			session.setAttribute("userId", userInfo.get("email"));
-	        session.setAttribute("access_Token", access_Token);
-		}
-		model.addAttribute("email",userInfo.get("email"));
-		model.addAttribute("nickname",userInfo.get("nickname"));
-		return "index";
-	}
-	
-	@RequestMapping(value="/logout")
-	public String logout(Model model,HttpSession session) {
-		kakaoApi.kakaoLogout((String)session.getAttribute("access_Token"));
-		session.removeAttribute("access_Token");
-	    session.removeAttribute("userId");
-	    model.addAttribute("message","로그아웃 되었습니다.");
-	    model.addAttribute("flag",1);
-		return "index";
-	}
+//	/**
+//	 * GET /oauth/authorize?client_id={app_key}&redirect_uri={redirect_uri}&response_type=code HTTP/1.1
+//	 * Host: kauth.kakao.com
+//	 * HTTP/1.1 302 Found
+//	 * Content-Length: 0
+//     * Location: {redirect_uri}?code={authorize_code}
+//	 */
+//	@RequestMapping(value="/login")
+//	public String login(@RequestParam("code") String code,Model model,HttpSession session) {
+//		log.info("code: "+code);
+//		//요청해서 받은 code를 이용해서 POST로 토큰을 요청하면 받아온다.
+//		String access_Token = kakaoApi.getAccessToken(code);
+//		log.info("access_Token: "+access_Token);
+//		//받아온 토큰을 이용해서 사용자 정보를 가져온다.
+//		HashMap<String,Object> userInfo = kakaoApi.getUserInfo(access_Token);
+//		
+//		//만약 클라이언트 이메일이 존재한다면 세션에 이메일과 토큰 등록
+//		if(userInfo.get("email")!=null) {
+//			session.setAttribute("userId", userInfo.get("email"));
+//	        session.setAttribute("access_Token", access_Token);
+//		}
+//		model.addAttribute("email",userInfo.get("email"));
+//		model.addAttribute("nickname",userInfo.get("nickname"));
+//		return "index";
+//	}
+//	
+//	@RequestMapping(value="/logout")
+//	public String logout(Model model,HttpSession session) {
+//		kakaoApi.kakaoLogout((String)session.getAttribute("access_Token"));
+//		session.removeAttribute("access_Token");
+//	    session.removeAttribute("userId");
+//	    model.addAttribute("message","로그아웃 되었습니다.");
+//	    model.addAttribute("flag",1);
+//		return "index";
+//	}
 }
